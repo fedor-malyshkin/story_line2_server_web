@@ -5,8 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-
 import ru.nlp_project.story_line2.config.ConfigurationException;
 import ru.nlp_project.story_line2.config.YAMLConfigurationReader;
 import ru.nlp_project.story_line2.server_web.IConfigurationManager;
@@ -16,7 +14,6 @@ public class ConfigurationManagerImpl implements IConfigurationManager {
 	private MasterConfiguration masterConfiguration;
 	protected File parentFile;
 
-	@Inject
 	public ConfigurationManagerImpl() {
 
 	}

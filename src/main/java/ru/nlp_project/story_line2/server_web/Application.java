@@ -6,6 +6,9 @@ import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import ru.nlp_project.story_line2.server_web.resources.CategoryResource;
+import ru.nlp_project.story_line2.server_web.resources.NewsArticleResource;
+
 public class Application {
 
 
@@ -31,7 +34,10 @@ public class Application {
 	public class MyApplication extends ResourceConfig {
 		public MyApplication() {
 			packages("ru.nlp_project.story_line2.server_web.resources");
+			registerInstances(new CategoryResource(), new NewsArticleResource());
 		}
+
+
 	}
 
 

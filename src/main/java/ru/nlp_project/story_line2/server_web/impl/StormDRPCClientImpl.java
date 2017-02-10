@@ -14,7 +14,6 @@ import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 
 public class StormDRPCClientImpl implements IStormDRPCClient {
 
-	@Inject
 	public IConfigurationManager configurationManager;
 	private DRPCClient drpcClient;
 	private boolean initilized;
