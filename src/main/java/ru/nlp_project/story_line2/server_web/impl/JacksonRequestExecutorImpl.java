@@ -20,4 +20,17 @@ public class JacksonRequestExecutorImpl implements IRequestExecutor {
 		return JacksonJSONUtils.serialize(list);
 	}
 
+	@Override
+	public String getSources() {
+		List<JacksonSourceModel> list = Arrays.asList(
+				new JacksonSourceModel("asbd1", "bnkomi.ru", "Информационное агентство БНКоми"),
+				new JacksonSourceModel("asbd2", "7x7-journal.ru",
+						"Межрегиональный интернет-журнал \"7x7\""),
+				new JacksonSourceModel("asbd2", "komiinform.ru",
+						"Информационное агенство Комиинформ"));
+		return JacksonJSONUtils.serialize(list);
+	}
+
+
+
 }

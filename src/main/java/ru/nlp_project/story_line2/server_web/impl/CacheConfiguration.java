@@ -13,4 +13,12 @@ public class CacheConfiguration {
 		return result;
 	}
 
+	public CacheControl getSources() {
+		CacheControl result = new CacheControl();
+		int seconds = (int) TimeUnit.MINUTES.toSeconds(5);
+		result.setMaxAge(seconds);
+		return result;
+	}
+
+
 }

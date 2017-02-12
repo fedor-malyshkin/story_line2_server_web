@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.dagger.ApplicationBuilder;
+import ru.nlp_project.story_line2.server_web.di.ApplicationBuilder;
 
 @Path("/news_articles")
 @Produces(MediaType.APPLICATION_JSON)

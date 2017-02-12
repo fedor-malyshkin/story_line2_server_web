@@ -11,23 +11,23 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.di.ApplicationBuilder;
 import ru.nlp_project.story_line2.server_web.impl.CacheConfiguration;
 
-@Path("/categories")
+@Path("/sources")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class CategoryResource {
+public class SourceResource {
 
 	public IRequestExecutor executor;
 	public CacheConfiguration cacheConfiguration;
 
-	public CategoryResource() {
+	public SourceResource() {
 		ApplicationBuilder.inject(this);
 	}
 
 
 	@GET
-	public Response getCategories() {
-		Response result = Response.ok(executor.getCategories())
-				.cacheControl(cacheConfiguration.getCategories()).encoding("UTF-8").build();
+	public Response getSources() {
+		Response result = Response.ok(executor.getSources())
+				.cacheControl(cacheConfiguration.getSources()).encoding("UTF-8").build();
 		return result;
 	}
 

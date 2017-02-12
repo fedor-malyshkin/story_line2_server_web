@@ -6,4 +6,7 @@ public interface IRequestExecutor {
 		return "";
 	}
 
+	default String getSources() {
+		return "";
+	}
 }
