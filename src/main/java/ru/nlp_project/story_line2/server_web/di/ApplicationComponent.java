@@ -9,6 +9,7 @@ class ApplicationComponent {
 
 	public void inject(NewsArticleResource instance) {
 		instance.executor = module.provideRequestExecutor();
+		instance.cacheConfiguration = module.provideCacheConfiguration();
 	}
 
 	public void inject(CategoryResource instance) {

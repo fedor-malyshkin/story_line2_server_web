@@ -9,4 +9,12 @@ public interface IRequestExecutor {
 	default String getSources() {
 		return "";
 	}
+
+	default String getNewsArticles(String sourceDomain, boolean headers, int count) {
+		return "";
+	}
+
+	default String getNewsArticleById(String sourceDomain, String newsArticleId) {
+		return "";
+	}
 }
