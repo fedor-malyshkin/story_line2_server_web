@@ -7,14 +7,18 @@ public class JacksonSourceModel {
 	public String domain;
 	@JsonProperty("name")
 	public String name;
+	@JsonProperty("short_name")
+	public String shortName;
 	@JsonProperty("id")
 	public String id;
 
 	
-	public JacksonSourceModel(String id, String domain, String name) {
+	public JacksonSourceModel(String id, String domain, String shortName,  String name) {
 		super();
 		this.id = id;
+		
 		this.domain = domain;
+		this.shortName = shortName;
 		this.name = name;
 	}
 

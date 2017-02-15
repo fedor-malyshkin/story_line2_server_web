@@ -13,7 +13,7 @@ public class JacksonRequestExecutorImpl implements IRequestExecutor {
 		// String id, String source, Date date, String title,
 		// String content, String path, Date processingDate
 		JacksonNewsArticleModel model = new JacksonNewsArticleModel("asbd3", "bnkomi.ru",
-				new Date(3), "Новость 3", "Content of Новость 3",
+				new Date(3), "Новость 3", "Content of Новость 3 from netw",
 				"https://www.bnkomi.ru/data/news/59446/", new Date(30));
 		return JacksonJSONUtils.serialize(model);
 	}
@@ -45,10 +45,11 @@ public class JacksonRequestExecutorImpl implements IRequestExecutor {
 	@Override
 	public String listSources() {
 		List<JacksonSourceModel> list = Arrays.asList(
-				new JacksonSourceModel("asbd1", "bnkomi.ru", "Информационное агентство БНКоми"),
-				new JacksonSourceModel("asbd2", "7x7-journal.ru",
+				new JacksonSourceModel("asbd1", "bnkomi.ru", "БНК",
+						"Информационное агентство БНКоми"),
+				new JacksonSourceModel("asbd2", "7x7-journal.ru", "\"7x7\"",
 						"Межрегиональный интернет-журнал \"7x7\""),
-				new JacksonSourceModel("asbd2", "komiinform.ru",
+				new JacksonSourceModel("asbd2", "komiinform.ru", "komiinform",
 						"Информационное агенство Комиинформ"));
 		return JacksonJSONUtils.serialize(list);
 	}
