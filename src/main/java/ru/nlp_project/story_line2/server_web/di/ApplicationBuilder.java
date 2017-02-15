@@ -2,6 +2,7 @@ package ru.nlp_project.story_line2.server_web.di;
 
 import ru.nlp_project.story_line2.server_web.resources.CategoryResource;
 import ru.nlp_project.story_line2.server_web.resources.NewsArticleResource;
+import ru.nlp_project.story_line2.server_web.resources.NewsHeaderResource;
 import ru.nlp_project.story_line2.server_web.resources.SourceResource;
 
 public class ApplicationBuilder {
@@ -25,6 +26,10 @@ public class ApplicationBuilder {
 	}
 
 	public static void inject(SourceResource instance) {
+		getBuilder().inject(instance);		
+	}
+
+	public static void inject(NewsHeaderResource instance) {
 		getBuilder().inject(instance);		
 	}
 

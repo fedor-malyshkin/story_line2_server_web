@@ -25,9 +25,9 @@ public class CategoryResource {
 
 
 	@GET
-	public Response getCategories() {
-		Response result = Response.ok(executor.getCategories())
-				.cacheControl(cacheConfiguration.getCategories()).encoding("UTF-8").build();
+	public Response listCategories() {
+		Response result = Response.ok(executor.listCategories())
+				.cacheControl(cacheConfiguration.listCategories()).encoding("UTF-8").build();
 		return result;
 	}
 

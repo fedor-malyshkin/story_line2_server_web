@@ -8,6 +8,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import ru.nlp_project.story_line2.server_web.resources.CategoryResource;
 import ru.nlp_project.story_line2.server_web.resources.NewsArticleResource;
+import ru.nlp_project.story_line2.server_web.resources.NewsHeaderResource;
 import ru.nlp_project.story_line2.server_web.resources.SourceResource;
 
 public class Application {
@@ -36,7 +37,7 @@ public class Application {
 		public MyApplication() {
 			packages("ru.nlp_project.story_line2.server_web.resources");
 			registerInstances(new CategoryResource(), new NewsArticleResource(),
-					new SourceResource());
+					new NewsHeaderResource(), new SourceResource());
 		}
 
 
