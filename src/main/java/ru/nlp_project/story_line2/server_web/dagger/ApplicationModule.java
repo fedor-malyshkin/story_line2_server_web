@@ -1,4 +1,4 @@
-package ru.nlp_project.story_line2.server_web.di;
+package ru.nlp_project.story_line2.server_web.dagger;
 
 import javax.inject.Singleton;
 
