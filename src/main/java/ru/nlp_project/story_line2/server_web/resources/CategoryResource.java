@@ -8,8 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.dagger.ApplicationBuilder;
-import ru.nlp_project.story_line2.server_web.impl.CacheConfiguration;
+import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
 
 @Path("/categories")
 @Produces(MediaType.APPLICATION_JSON)
@@ -17,17 +16,15 @@ import ru.nlp_project.story_line2.server_web.impl.CacheConfiguration;
 public class CategoryResource {
 
 	public IRequestExecutor executor;
-	public CacheConfiguration cacheConfiguration;
 
 	public CategoryResource() {
-		ApplicationBuilder.inject(this);
+		ServerWebBuilder.getComponent().inject(this);
 	}
 
 
 	@GET
 	public Response listCategories() {
-		Response result = Response.ok(executor.listCategories())
-				.cacheControl(cacheConfiguration.listCategories()).encoding("UTF-8").build();
+		Response result = Response.ok(executor.listCategories()).encoding("UTF-8").build();
 		return result;
 	}
 

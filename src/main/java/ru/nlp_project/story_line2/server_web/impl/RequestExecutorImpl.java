@@ -1,12 +1,14 @@
 package ru.nlp_project.story_line2.server_web.impl;
 
-import ru.nlp_project.story_line2.server_web.IConfigurationManager;
+import javax.inject.Inject;
+
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 
 public class RequestExecutorImpl implements IRequestExecutor {
 
-	IConfigurationManager configurationManager;
+
+	@Inject
 	IStormDRPCClient drpcClient;
 
 	public void initialize() {

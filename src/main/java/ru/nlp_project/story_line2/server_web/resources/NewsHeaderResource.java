@@ -1,6 +1,5 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -12,8 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.dagger.ApplicationBuilder;
-import ru.nlp_project.story_line2.server_web.impl.CacheConfiguration;
+import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
 
 @Path("/news_headers/{source_domain}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,10 +19,9 @@ import ru.nlp_project.story_line2.server_web.impl.CacheConfiguration;
 public class NewsHeaderResource {
 
 	public IRequestExecutor executor;
-	public CacheConfiguration cacheConfiguration;
 
 	public NewsHeaderResource() {
-		ApplicationBuilder.inject(this);
+		ServerWebBuilder.getComponent().inject(this);
 	}
 
 	/**
@@ -36,7 +33,7 @@ public class NewsHeaderResource {
 	public Response listHeaders(@DefaultValue("10") @QueryParam("count") int count,
 			@PathParam("source_domain") String sourceDomain) {
 		Response result = Response.ok(executor.listNewsHeaders(sourceDomain, count))
-				.cacheControl(cacheConfiguration.listNewsHeaders()).encoding("UTF-8").build();
+				.encoding("UTF-8").build();
 		return result;
 	}
 
