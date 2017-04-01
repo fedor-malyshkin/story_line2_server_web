@@ -1,0 +1,3 @@
+server_web.drpc.host: localhost
+server_web.drpc.port: 3333
+

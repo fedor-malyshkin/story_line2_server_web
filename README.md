@@ -5,7 +5,7 @@
 - Метод: GET
 - URL : `http://endpoint/categories`
 - Ответ:
-```{json}
+```json
 [ {
   "name" : "auto",
   "id" : "asbd1"
@@ -24,21 +24,21 @@
 - Метод: GET
 - URL : `http://endpoint/sources`
 - Ответ:
-```{json}
+```json
 [ {
-  "domain" : "bnkomi.ru",
+  "source" : "bnkomi.ru",
   "name" : "Информационное агентство БНКоми",
 "short_name" : "БНКоми",
   "id" : "asbd1"
 }, {
-  "domain" : "7x7-journal.ru",
+  "source" : "7x7-journal.ru",
   "name" : "Межрегиональный интернет-журнал \"7x7\"",
   "short_name" : "\"7x7\"",  
   "id" : "asbd2"
 },
 ....
 {
-  "domain" : "komiinform.ru",
+  "source" : "komiinform.ru",
   "name" : "Информационное агенство Комиинформ",
   "short_name" : "Комиинформ",  
   "id" : "asbd2"
@@ -52,21 +52,21 @@
 	- `count` - кол-во статей/заголовков для выдачи
 
 - Ответ:
-```{json}
+```json
 [ {
   "title" : "Новость 1",
   "date" : "1970-01-01T00:00:00.001Z",
-  "name" : "bnkomi.ru",
+  "source" : "bnkomi.ru",
   "id" : "asbd1"
 }, {
   "title" : "Новость 2",
   "date" : "1970-01-01T00:00:00.002Z",
-  "name" : "bnkomi.ru",
+  "source" : "bnkomi.ru",
   "id" : "asbd2"
 }, {
   "title" : "Новость 3",
   "date" : "1970-01-01T00:00:00.003Z",
-  "name" : "bnkomi.ru",
+  "source" : "bnkomi.ru",
   "id" : "asbd3"
 } ]
 ```
@@ -75,13 +75,13 @@
 - Метод: GET
 - URL : `http://endpoint/news_articles/{article_id}` (`http://endpoint/news_articles/1234`)
 - Ответ:
-```{json}
+```json
 {
   "content" : "Content of Новость 3",
   "path" : "https://www.bnkomi.ru/data/news/59446/",
   "title" : "Новость 3",
   "date" : "1970-01-01T00:00:00.003Z",
   "processing_date" : "1970-01-01T00:00:00.030Z",
-  "name" : "bnkomi.ru",
+  "source" : "bnkomi.ru",
   "id" : "asbd3"
 }```
