@@ -1,4 +1,4 @@
-package ru.nlp_project.story_line2.server_web.impl;
+package ru.nlp_project.story_line2.server_web.utils;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
  * @author fedor
  *
  */
-class JacksonJSONUtils {
+public class JSONUtils {
 
 	public static class JsonDateDeserializer extends JsonDeserializer<Date> {
 

@@ -2,28 +2,26 @@ package ru.nlp_project.story_line2.server_web.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JacksonSourceModel {
-	@JsonProperty("domain")
-	public String domain;
+public class SourceModel {
 	@JsonProperty("name")
 	public String name;
-	@JsonProperty("short_name")
-	public String shortName;
-	@JsonProperty("id")
-	public String id;
+	@JsonProperty("title")
+	public String title;
+	@JsonProperty("title_short")
+	public String titleShort;
 
 	
-	public JacksonSourceModel(String id, String domain, String shortName,  String name) {
+	public SourceModel(String name, String title, String titleShort) {
 		super();
-		this.id = id;
-		
-		this.domain = domain;
-		this.shortName = shortName;
 		this.name = name;
+		this.title = title;
+		this.titleShort = titleShort;
 	}
 
 
-	public JacksonSourceModel() {
+
+
+	public SourceModel() {
 		super();
 	}
 

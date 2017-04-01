@@ -26,22 +26,19 @@
 - Ответ:
 ```json
 [ {
-  "source" : "bnkomi.ru",
-  "name" : "Информационное агентство БНКоми",
-"short_name" : "БНКоми",
-  "id" : "asbd1"
+  "name" : "bnkomi.ru",
+  "title" : "Информационное агентство БНКоми",
+  "title_short" : "БНКоми"
 }, {
-  "source" : "7x7-journal.ru",
-  "name" : "Межрегиональный интернет-журнал \"7x7\"",
-  "short_name" : "\"7x7\"",  
-  "id" : "asbd2"
+  "name" : "7x7-journal.ru",
+  "title" : "Межрегиональный интернет-журнал \"7x7\"",
+  "title_short" : "\"7x7\""
 },
 ....
 {
-  "source" : "komiinform.ru",
-  "name" : "Информационное агенство Комиинформ",
-  "short_name" : "Комиинформ",  
-  "id" : "asbd2"
+  "name" : "komiinform.ru",
+  "title" : "Информационное агенство Комиинформ",
+  "title_short" : "Комиинформ"
 } ]
 ```
 

@@ -1,5 +1,6 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,7 +18,8 @@ import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
 @Consumes(MediaType.APPLICATION_JSON)
 public class NewsArticleResource {
 
-	public IRequestExecutor executor;
+	@Inject
+	IRequestExecutor executor;
 
 	public NewsArticleResource() {
 		ServerWebBuilder.getComponent().inject(this);

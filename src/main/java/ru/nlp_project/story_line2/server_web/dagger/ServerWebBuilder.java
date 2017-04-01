@@ -8,13 +8,14 @@ public class ServerWebBuilder {
 
 
 	private static ServerWebComponent component;
+	private static boolean testingMode = false;
 	private static ServerWebConfiguration serverWebConfiguration;
 
 
 	public static ServerWebComponent getComponent() {
 		if (component == null) {
 			MetricRegistry metricRegistry = new MetricRegistry();
-			ServerWebModule module = new ServerWebModule(metricRegistry, serverWebConfiguration);
+			ServerWebModule module = new ServerWebModule(metricRegistry, serverWebConfiguration, testingMode);
 			component = DaggerServerWebComponent.builder().serverWebModule(module).build();
 		}
 		return component;
@@ -23,5 +24,10 @@ public class ServerWebBuilder {
 	public static void setServerWebConfiguration(ServerWebConfiguration configuration) {
 		serverWebConfiguration = configuration;
 	}
+	
+	public static void setTestingMode(boolean testing) {
+		testingMode = testing;
+	}
+
 
 }

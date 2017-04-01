@@ -1,7 +1,11 @@
 package ru.nlp_project.story_line2.server_web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.dropwizard.Configuration;
@@ -12,6 +16,8 @@ import io.dropwizard.Configuration;
  * @author fedor
  *
  */
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServerWebConfiguration extends Configuration {
 
 	public static class MetricsConfiguration {
@@ -48,6 +54,24 @@ public class ServerWebConfiguration extends Configuration {
 	}
 
 
+	public static class SourceConfiguration {
+		@NotEmpty
+		@JsonProperty(value = "name")
+		public String name = "";
+
+		@NotEmpty
+		@JsonProperty(value = "title")
+		public String title;
+
+
+		@NotEmpty
+		@JsonProperty(value = "title_short")
+		public String titleShort;
+
+	}
+
+
+
 	@JsonProperty("server_web.drpc.host")
 	public String drpcHost;
 	@JsonProperty("server_web.drpc.port")
@@ -55,5 +79,7 @@ public class ServerWebConfiguration extends Configuration {
 
 	@JsonProperty(value = "influxdb_metrics")
 	public MetricsConfiguration metrics = new MetricsConfiguration();
+	@JsonProperty(value = "sources")
+	public List<SourceConfiguration> sources = new ArrayList<SourceConfiguration>();
 
 }
