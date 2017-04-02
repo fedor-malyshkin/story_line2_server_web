@@ -1,8 +1,15 @@
 package ru.nlp_project.story_line2.server_web;
 
+import javax.inject.Inject;
+
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
+import ru.nlp_project.story_line2.server_web.resources.CategoryResource;
+import ru.nlp_project.story_line2.server_web.resources.NewsArticleResource;
+import ru.nlp_project.story_line2.server_web.resources.NewsHeaderResource;
+import ru.nlp_project.story_line2.server_web.resources.SourceResource;
 
 /**
  * Объект-приложение (требуется фреймворком dropwizard.io)/
@@ -12,6 +19,9 @@ import io.dropwizard.setup.Environment;
  *
  */
 public class ServerWebApplication extends Application<ServerWebConfiguration> {
+	@Inject
+	IRequestExecutor executor;
+
 	public static void main(String[] args) throws Exception {
 		new ServerWebApplication().run(args);
 	}
@@ -25,12 +35,24 @@ public class ServerWebApplication extends Application<ServerWebConfiguration> {
 	public void initialize(Bootstrap<ServerWebConfiguration> bootstrap) {}
 
 	@Override
-	public void run(ServerWebConfiguration configuration, Environment environment) throws Exception {
+	public void run(ServerWebConfiguration configuration, Environment environment)
+			throws Exception {
+		ServerWebBuilder.setServerWebConfiguration(configuration);
+		ServerWebBuilder.getComponent().inject(this);
+		
 		final ServerWebHealthCheck healthCheck = new ServerWebHealthCheck(configuration);
-
+		
+		
+		// resources
+		environment.jersey().register(new CategoryResource(executor));
+		environment.jersey().register(new NewsArticleResource(executor));
+		environment.jersey().register(new NewsHeaderResource(executor));
+		environment.jersey().register(new SourceResource(executor));
+		// hc
 		environment.healthChecks().register("server_web", healthCheck);
-		ServerWeb crawler = ServerWeb.newInstance(configuration);
-		environment.lifecycle().manage(crawler);
+		// core
+		ServerWeb serverWeb = ServerWeb.newInstance();		
+		environment.lifecycle().manage(serverWeb);
 
 	}
 

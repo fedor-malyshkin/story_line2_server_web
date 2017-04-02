@@ -28,31 +28,29 @@ import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
  */
 public class ServerWeb implements Managed {
 
+	public static final String MEDIA_TYPE_UTF8 = "application/json;charset=utf-8";
 	public static final String METRICS_SUFFIX = ".server_web";
 
-	public static ServerWeb newInstance(ServerWebConfiguration configuration) throws Exception {
-		ServerWeb result = new ServerWeb(configuration);
-		ServerWebBuilder.setServerWebConfiguration(configuration);
+	public static ServerWeb newInstance() throws Exception {
+		ServerWeb result = new ServerWeb();
 		ServerWebBuilder.getComponent().inject(result);
 		return result;
 	}
 
 
 	@Inject
-	protected MetricRegistry metricRegistry;
+	MetricRegistry metricRegistry;
+	@Inject
+	ServerWebConfiguration configuration;
 
-	private ServerWebConfiguration configuration;
-
-	private ServerWeb(ServerWebConfiguration configuration) {
-		this.configuration = configuration;
-	}
+	private ServerWeb() {}
 
 	private void initializeMetricsLogging() throws UnknownHostException {
 		MetricsConfiguration metricsConfiguration = configuration.metrics;
 
 
 		final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
-				.outputTo(LoggerFactory.getLogger("ru.nlp_project.story_line2.crawler"))
+				.outputTo(LoggerFactory.getLogger("ru.nlp_project.story_line2.server_web"))
 				.convertRatesTo(TimeUnit.SECONDS).convertDurationsTo(TimeUnit.MILLISECONDS).build();
 		reporter.start(1, TimeUnit.MINUTES);
 

@@ -1,7 +1,6 @@
 package ru.nlp_project.story_line2.server_web.impl;
 
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +9,7 @@ import javax.inject.Inject;
 import org.apache.storm.thrift.TException;
 import org.apache.storm.thrift.transport.TTransportException;
 import org.apache.storm.utils.DRPCClient;
+import org.apache.storm.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +37,10 @@ public class StormDRPCClientImpl implements IStormDRPCClient {
 
 	public void initialize() {
 		try {
-			drpcClient = new DRPCClient(Collections.emptyMap(), configurationManager.drpcHost,
-					configurationManager.drpcPort);
+			// get configuration (default, my, and command-line combined)
+			Map<String, Object> config = Utils.readStormConfig();
+			drpcClient = new DRPCClient(config, configurationManager.drpcHost,
+					configurationManager.drpcPort, 500);
 			initilized = true;
 		} catch (TTransportException e) {
 			initilized = false;

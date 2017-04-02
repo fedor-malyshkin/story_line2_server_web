@@ -1,3 +1,13 @@
-server_web.drpc.host: localhost
-server_web.drpc.port: 3333
+server_web.drpc.host: datahouse01.nlp-project.ru
+server_web.drpc.port: 3772
 
+sources:
+    - name: "bnkomi.ru"
+      title: "Информационное агентство БНКоми"
+      title_short: "БНКоми"
+    - name : "7x7-journal.ru"
+      title: "Межрегиональный интернет-журнал \"7x7\""
+      title_short: "\"7x7\""
+    - name: "komiinform.ru"
+      title: "Информационное агенство Комиинформ"
+      title_short: "Комиинформ"

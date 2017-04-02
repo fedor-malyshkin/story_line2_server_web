@@ -1,35 +1,38 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
+import ru.nlp_project.story_line2.server_web.ServerWeb;
 
+/**
+ * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
+ * 
+ * @author fedor
+ *
+ */
 @Path("/news_articles/")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Produces(ServerWeb.MEDIA_TYPE_UTF8)
+@Consumes(ServerWeb.MEDIA_TYPE_UTF8)
 public class NewsArticleResource {
 
-	@Inject
-	IRequestExecutor executor;
+	private IRequestExecutor executor;
 
-	public NewsArticleResource() {
-		ServerWebBuilder.getComponent().inject(this);
+	public NewsArticleResource(IRequestExecutor executor2) {
+		this.executor = executor2;
 	}
 
 	@GET
 	@Path("/{article_id}")
 	public Response getNewsArticleById(@PathParam("article_id") @NotNull String newsArticleId) {
 		Response result =
-				Response.ok(executor.getNewsArticleById(newsArticleId)).encoding("UTF-8").build();
+				Response.ok(executor.getNewsArticleById(newsArticleId)).build();
 		return result;
 
 	}
