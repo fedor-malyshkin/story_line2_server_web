@@ -13,8 +13,10 @@ import ru.nlp_project.story_line2.server_web.ServerWebConfiguration.SourceConfig
 import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 
 public class RequestExecutorImpl implements IRequestExecutor {
+
 	@Inject
 	IStormDRPCClient stormDRPCClient;
+
 	@Inject
 	ServerWebConfiguration configuration;
 	private String sourcesCache;
@@ -51,8 +53,6 @@ public class RequestExecutorImpl implements IRequestExecutor {
 		return stormDRPCClient.getNewsArticleById(newsArticleId);
 	}
 
-	
-	
 
 
 }

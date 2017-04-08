@@ -19,7 +19,16 @@ import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
 import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 
-public class StormDRPCClientImpl implements IStormDRPCClient {
+/**
+ * Синхронизируемый клиент Storm (не самый лучший вариант с точки зрения эффективности).
+ * 
+ * В связи с тем, что DRPC> клиент Storm ({@link org.apache.storm.utils.DRPCClient}) не 
+ * потокобезопасен -- требуется осуществлять работу с экземпляром из одного потока.  
+ * 
+ * @author fedor
+ *
+ */
+public class SynchronizedStormDRPCClientImpl implements IStormDRPCClient {
 
 	private static final String DRPC_METHOD_GET_NEWS_HEADERS = "get_news_headers";
 	private static final String DRPC_METHOD_GET_NEWS_ARTICLE = "get_news_article";
@@ -29,11 +38,10 @@ public class StormDRPCClientImpl implements IStormDRPCClient {
 
 	private boolean initilized;
 	private DRPCClient drpcClient;
-
 	private Logger log;
 
 	@Inject
-	public StormDRPCClientImpl() {
+	public SynchronizedStormDRPCClientImpl() {
 		log = LoggerFactory.getLogger(this.getClass());
 	}
 
@@ -50,7 +58,7 @@ public class StormDRPCClientImpl implements IStormDRPCClient {
 	}
 
 	@Override
-	public String getNewsHeaders(String source, int count) {
+	synchronized public String getNewsHeaders(String source, int count) {
 		DRPCClient client = getClient();
 		// args
 		Map<String, Object> args = new HashMap<String, Object>();
@@ -73,7 +81,7 @@ public class StormDRPCClientImpl implements IStormDRPCClient {
 	}
 
 	@Override
-	public String getNewsArticleById(String id) {
+	synchronized public String getNewsArticleById(String id) {
 		DRPCClient client = getClient();
 		// args
 		Map<String, Object> args = new HashMap<String, Object>();
@@ -85,12 +93,19 @@ public class StormDRPCClientImpl implements IStormDRPCClient {
 			log.error(e.getMessage(), e);
 			throw new IllegalStateException(e);
 		}
-		return removeSurroundingBrackets(drpcResult);
+		String res = removeSurroundingBrackets(drpcResult);
+		return convertArrayToElement(res);
 	}
 
 
-	private String removeSurroundingBrackets(String execute) {
-		String res = StringUtils.removeStartIgnoreCase(execute, "[[\"");
+	private String convertArrayToElement(String input) {
+		String res = StringUtils.removeStartIgnoreCase(input, "[");
+		res = StringUtils.removeEndIgnoreCase(res, "]");
+		return res;
+	}
+
+	private String removeSurroundingBrackets(String input) {
+		String res = StringUtils.removeStartIgnoreCase(input, "[[\"");
 		res = StringUtils.removeEndIgnoreCase(res, "\"]]");
 		res = StringEscapeUtils.unescapeJson(res);
 		return res;

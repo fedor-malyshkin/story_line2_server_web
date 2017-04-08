@@ -7,8 +7,8 @@ import dagger.Provides;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
+import ru.nlp_project.story_line2.server_web.impl.PooledStormDRPCClientImpl;
 import ru.nlp_project.story_line2.server_web.impl.RequestExecutorImpl;
-import ru.nlp_project.story_line2.server_web.impl.StormDRPCClientImpl;
 
 @Module
 class ServerWebModule {
@@ -32,11 +32,14 @@ class ServerWebModule {
 		return metricRegistry;
 	}
 
+
 	@Provides
-	public IStormDRPCClient provideStormDRPCClient(StormDRPCClientImpl instance) {
-		if (!testingMode) instance.initialize();
+	public IStormDRPCClient provideStormDRPCClient(PooledStormDRPCClientImpl instance) {
+		if (!testingMode)
+			instance.initialize();
 		return instance;
 	}
+
 
 
 	@Provides
@@ -47,7 +50,8 @@ class ServerWebModule {
 
 	@Provides
 	public IRequestExecutor provideRequestExecutor(RequestExecutorImpl instance) {
-		if (!testingMode) instance.initialize();
+		if (!testingMode)
+			instance.initialize();
 		return instance;
 	}
 
