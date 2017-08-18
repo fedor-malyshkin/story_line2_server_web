@@ -21,7 +21,6 @@ import ru.nlp_project.story_line2.server_web.ServerWebConfiguration.MetricsConfi
 import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
 
 /**
- * Крулер - основной класс бизнес-логики и построения компонентов.
  * 
  * @author fedor
  *
@@ -42,6 +41,7 @@ public class ServerWeb implements Managed {
 	MetricRegistry metricRegistry;
 	@Inject
 	ServerWebConfiguration configuration;
+	private ScheduledReporter reporterInfluxDB;
 
 	private ServerWeb() {}
 
@@ -52,11 +52,11 @@ public class ServerWeb implements Managed {
 		final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
 				.outputTo(LoggerFactory.getLogger("ru.nlp_project.story_line2.server_web"))
 				.convertRatesTo(TimeUnit.SECONDS).convertDurationsTo(TimeUnit.MILLISECONDS).build();
-		reporter.start(1, TimeUnit.MINUTES);
+		reporter.start(5, TimeUnit.MINUTES);
 
 		if (metricsConfiguration.enabled) {
 			String hostName = InetAddress.getLocalHost().getCanonicalHostName();
-			final ScheduledReporter reporterInfluxDB = InfluxdbReporter.forRegistry(metricRegistry)
+			reporterInfluxDB = InfluxdbReporter.forRegistry(metricRegistry)
 					.protocol(new HttpInfluxdbProtocol("http", metricsConfiguration.influxdbHost,
 							metricsConfiguration.influxdbPort, metricsConfiguration.influxdbUser,
 							metricsConfiguration.influxdbPassword, metricsConfiguration.influxdbDB))
@@ -90,7 +90,9 @@ public class ServerWeb implements Managed {
 
 
 	@Override
-	public void stop() throws Exception {}
+	public void stop() throws Exception {
+		reporterInfluxDB.stop();
+	}
 
 
 }
