@@ -1,26 +1,23 @@
 package ru.nlp_project.story_line2.server_web;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.dropwizard.Configuration;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Объект-конфигурация (требуется фреймворком dropwizard.io)
- * 
- * @author fedor
  *
+ * @author fedor
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ServerWebConfiguration extends Configuration {
 
 	public static class MetricsConfiguration {
+
 		// enabled: true
 		@NotEmpty
 		@JsonProperty(value = "enabled")
@@ -55,6 +52,7 @@ public class ServerWebConfiguration extends Configuration {
 
 
 	public static class SourceConfiguration {
+
 		@NotEmpty
 		@JsonProperty(value = "name")
 		public String name = "";
@@ -71,10 +69,9 @@ public class ServerWebConfiguration extends Configuration {
 	}
 
 
-
-	@JsonProperty("server_web.drpc.host")
+	@JsonProperty("drpc_host")
 	public String drpcHost;
-	@JsonProperty("server_web.drpc.port")
+	@JsonProperty("drpc_port")
 	public int drpcPort;
 
 	@JsonProperty(value = "influxdb_metrics")

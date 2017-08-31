@@ -16,8 +16,8 @@ import ru.nlp_project.story_line2.server_web.resources.SourceResource;
 
 /**
  * Объект-приложение (требуется фреймворком dropwizard.io)/
- * 
- * 
+ *
+ *
  * @author fedor
  *
  */
