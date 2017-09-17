@@ -1,5 +1,5 @@
-server_web.drpc.host: datahouse01.nlp-project.ru
-server_web.drpc.port: 3772
+drpc_host: datahouse01.nlp-project.ru
+drpc_port: 3772
 
 sources:
     - name: "bnkomi.ru"

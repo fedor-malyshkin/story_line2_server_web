@@ -1,5 +1,5 @@
-server_web.drpc.host: localhost
-server_web.drpc.port: 3333
+drpc_host: localhost
+drpc_port: 3333
 
 sources:
     - name: "bnkomi.ru"

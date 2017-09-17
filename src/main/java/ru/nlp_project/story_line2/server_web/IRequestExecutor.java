@@ -10,7 +10,7 @@ public interface IRequestExecutor {
 		return "";
 	}
 
-	default String listNewsHeaders(String sourceDomain, int count) {
+	default String listNewsHeaders(String sourceDomain, int count, String lastNewsId) {
 		return "";
 	}
 

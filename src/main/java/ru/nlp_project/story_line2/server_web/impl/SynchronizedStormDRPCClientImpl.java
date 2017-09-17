@@ -58,7 +58,7 @@ public class SynchronizedStormDRPCClientImpl implements IStormDRPCClient {
 	}
 
 	@Override
-	synchronized public String getNewsHeaders(String source, int count) {
+	synchronized public String getNewsHeaders(String source, int count, String lastNewsId) {
 		DRPCClient client = getClient();
 		// args
 		Map<String, Object> args = new HashMap<String, Object>();
