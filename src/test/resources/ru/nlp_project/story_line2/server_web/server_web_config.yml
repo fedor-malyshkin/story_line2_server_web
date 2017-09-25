@@ -1,4 +1,12 @@
-drpc_host: datahouse01.nlp-project.ru
+server:
+  applicationConnectors:
+    - type: http
+      port: 8001
+  adminConnectors:
+    - type: http
+      port: 8002
+
+drpc_host: "datahouse01.nlp-project.ru"
 drpc_port: 3772
 
 sources:
@@ -11,3 +19,40 @@ sources:
     - name: "komiinform.ru"
       title: "Информационное агенство Комиинформ"
       title_short: "Комиинформ"
+
+# Metrics reporting
+influxdb_metrics:
+   enabled: true
+   influxdb_host: "ci.nlp-project.ru"
+   influxdb_port: 8086
+   influxdb_db: "storyline"
+   influxdb_user: "server_web"
+   influxdb_password: "server_web"
+   reporting_period: 30
+
+
+# Logging settings.
+logging:
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+  # Logger-specific levels.
+  loggers:
+    "ru.nlp_project.story_line2.server_web": DEBUG
+
+  appenders:
+    - type: console
+      threshold: ERROR
+      target: stdout
+      logFormat: "%-5level [%d] %logger{32} - %msg%n"
+    - type: file
+      # threshold: DEBUG
+      logFormat: "%-5level [%d] %logger{32} - %msg%n"
+      # The file to which current statements will be logged.
+      currentLogFilename: /data/logs/server_web/server_web.log
+      # When the log file rotates, the archived log will be renamed to this and gzipped. The
+      # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
+      # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
+      archivedLogFilenamePattern: server_web-%d.log.gz
+      # The number of archived files to keep.
+      archivedFileCount: 5
+

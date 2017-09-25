@@ -2,8 +2,13 @@ package ru.nlp_project.story_line2.server_web.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
@@ -14,7 +19,6 @@ public class RequestExecutorImpl implements IRequestExecutor {
 
 	@Inject
 	IStormDRPCClient stormDRPCClient;
-
 	@Inject
 	ServerWebConfiguration configuration;
 	private String sourcesCache;
@@ -54,5 +58,76 @@ public class RequestExecutorImpl implements IRequestExecutor {
 		return stormDRPCClient.getNewsArticleById(newsArticleId);
 	}
 
+	@Override
+	public IImageData getImageDataByNewsArticleId(String newsArticleId) {
+		// возвражает JSON с 2-я ключами "image_url" (images's FQDN) и "images_data" (base64 on empty string)
+		String json = stormDRPCClient.getImageDataByNewsArticleId(newsArticleId);
+		return convertJsonToImagesData(json);
+	}
 
+	protected IImageData convertJsonToImagesData(String json) {
+		Map<String, String> map = (Map<String, String>) JSONUtils.deserialize(json, HashMap.class);
+		String image_url = map.get("image_url");
+		String image_data = map.get("image_data");
+
+		// bytes
+		byte[] bytes = {};
+		if (image_data != null && !image_data.isEmpty()) {
+			Decoder decoder = Base64.getDecoder();
+			bytes = decoder.decode(image_data);
+		}
+
+		// media type
+		String mediaType = "";
+		String ext = StringUtils.substringAfterLast(image_url, ".");
+		switch (ext) {
+			case "jpg":
+			case "jpeg": {
+				mediaType = "image/jpeg";
+				break;
+			}
+			case "png": {
+				mediaType = "image/png";
+				break;
+			}
+			default: {
+				mediaType = "image/png";
+				break;
+			}
+		}
+		return new ImageDataImpl(bytes, mediaType, image_url);
+	}
+
+	public class ImageDataImpl implements IImageData {
+
+		private byte[] imageData;
+		private String mediaType;
+		private String url;
+
+		public ImageDataImpl(byte[] imageData, String mediaType, String url) {
+			this.imageData = imageData;
+			this.mediaType = mediaType;
+			this.url = url;
+		}
+
+		@Override
+		public String getMediaType() {
+			return mediaType;
+		}
+
+		@Override
+		public byte[] bytes() {
+			return imageData;
+		}
+
+		@Override
+		public String getUrl() {
+			return url;
+		}
+
+		@Override
+		public boolean hasImageData() {
+			return imageData.length != 0;
+		}
+	}
 }
