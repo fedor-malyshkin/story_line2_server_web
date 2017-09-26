@@ -1,6 +1,5 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import java.net.URI;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -47,11 +46,11 @@ public class NewsArticleResource {
 
 			CacheControl ccontrol = new CacheControl();
 			// 1 hour
-			ccontrol.setMaxAge(60*60);
+			ccontrol.setMaxAge(60 * 60);
 			return Response.ok(imageData.bytes(), imageData.getMediaType())
 					.header("Content-Length", imageData.bytes().length).cacheControl(ccontrol).build();
 		} else {
-			return Response.status(301).contentLocation(URI.create(imageData.getUrl())).build();
+			return Response.status(301).header("Location", imageData.getUrl()).build();
 		}
 	}
 
