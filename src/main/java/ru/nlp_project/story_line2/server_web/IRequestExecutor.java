@@ -1,15 +1,9 @@
 package ru.nlp_project.story_line2.server_web;
 
-import javax.ws.rs.client.Entity;
-
 public interface IRequestExecutor {
-	interface IImageData {
-		String getUrl();
-		boolean hasImageData();
-		String getMediaType();
-		byte[] bytes();
-	}
 
+	byte[] processImageOperation(String operation, Integer width, Integer height, byte[] imageIn,
+			String mediaType);
 
 	default String listCategories() {
 		return "";
@@ -28,4 +22,15 @@ public interface IRequestExecutor {
 	}
 
 	IImageData getImageDataByNewsArticleId(String newsArticleId);
+
+	interface IImageData {
+
+		String getUrl();
+
+		boolean hasImageData();
+
+		String getMediaType();
+
+		byte[] bytes();
+	}
 }

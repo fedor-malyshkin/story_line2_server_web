@@ -1,5 +1,6 @@
 package ru.nlp_project.story_line2.server_web.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
@@ -17,6 +20,7 @@ import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 
 public class RequestExecutorImpl implements IRequestExecutor {
 
+	private final Logger log;
 	@Inject
 	IStormDRPCClient stormDRPCClient;
 	@Inject
@@ -25,6 +29,7 @@ public class RequestExecutorImpl implements IRequestExecutor {
 
 	@Inject
 	public RequestExecutorImpl() {
+		log = LoggerFactory.getLogger(this.getClass());
 	}
 
 	public void initialize() {
@@ -40,6 +45,22 @@ public class RequestExecutorImpl implements IRequestExecutor {
 			sourcesCache = JSONUtils.serialize(arr);
 		}
 		return sourcesCache;
+	}
+
+	@Override
+	public byte[] processImageOperation(String operation, Integer width, Integer height,
+			byte[] imageIn, String mediaType) {
+		byte[] result = null;
+		try {
+			if ("crop".equalsIgnoreCase(operation)) {
+				return ImageUtils.crop(imageIn, width, height, mediaType);
+			} else if ("scale".equalsIgnoreCase(operation)) {
+				return ImageUtils.scale(imageIn, width, height, mediaType);
+			}
+		} catch (IOException e) {
+			log.error("Exception while image manipulating: {} {}", e.getMessage(), e);
+		}
+		throw new IllegalArgumentException("NIE!");
 	}
 
 	@Override
