@@ -23,14 +23,33 @@ public interface IRequestExecutor {
 
 	IImageData getImageDataByNewsArticleId(String newsArticleId);
 
+	/**
+	 * Interface for data about images in news.
+	 */
 	interface IImageData {
 
+		/**
+		 * Get image url.
+		 * @return url or null in abscence case.
+		 */
 		String getUrl();
 
+		/**
+		 * Has/Hasn't image data.
+		 * @return
+		 */
 		boolean hasImageData();
 
+		/**
+		 * Get media type of image.
+		 * @return media type or empty string
+		 */
 		String getMediaType();
 
+		/**
+		 * Get image.
+		 * @return image bytes or empty array.
+		 */
 		byte[] bytes();
 	}
 }

@@ -16,6 +16,7 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration.SourceConfiguration;
+import ru.nlp_project.story_line2.server_web.utils.ImageUtils;
 import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 
 public class RequestExecutorImpl implements IRequestExecutor {
@@ -108,10 +109,6 @@ public class RequestExecutorImpl implements IRequestExecutor {
 				break;
 			}
 			case "png": {
-				mediaType = "image/png";
-				break;
-			}
-			default: {
 				mediaType = "image/png";
 				break;
 			}
