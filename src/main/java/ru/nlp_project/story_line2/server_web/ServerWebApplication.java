@@ -10,6 +10,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
 import ru.nlp_project.story_line2.server_web.resources.CategoryResource;
+import ru.nlp_project.story_line2.server_web.resources.FeedbackResource;
 import ru.nlp_project.story_line2.server_web.resources.NewsArticleResource;
 import ru.nlp_project.story_line2.server_web.resources.NewsHeaderResource;
 import ru.nlp_project.story_line2.server_web.resources.SourceResource;
@@ -51,6 +52,8 @@ public class ServerWebApplication extends Application<ServerWebConfiguration> {
 		environment.jersey().register(new NewsArticleResource(executor));
 		environment.jersey().register(new NewsHeaderResource(executor));
 		environment.jersey().register(new SourceResource(executor));
+		environment.jersey().register(new FeedbackResource(executor));
+
 		// OUTBOUND_CONTENT_LENGTH_BUFFER
 		DropwizardResourceConfig resourceConfig = environment.jersey().getResourceConfig();
 		resourceConfig.property(CommonProperties.OUTBOUND_CONTENT_LENGTH_BUFFER, 1024 * 1024);

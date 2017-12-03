@@ -19,6 +19,12 @@ sources:
     - name: "komiinform.ru"
       title: "Информационное агенство Комиинформ"
       title_short: "Комиинформ"
+    # - name: "komiinform2.ru"
+    #   title: "Информационное агенство Комиинформ2"
+    #   title_short: "Комиинформ2"
+    # - name: "komiinform3.ru"
+    #   title: "Информационное агенство Комиинформ2"
+    #   title_short: "Комиинформ3"
 
 # Metrics reporting
 influxdb_metrics:
@@ -55,4 +61,3 @@ logging:
       archivedLogFilenamePattern: server_web-%d.log.gz
       # The number of archived files to keep.
       archivedFileCount: 5
-
