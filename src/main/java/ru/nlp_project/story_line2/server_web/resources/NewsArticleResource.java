@@ -1,61 +1,55 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
+import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor.IImageData;
-import ru.nlp_project.story_line2.server_web.ServerWeb;
 
 /**
  * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
  *
  * @author fedor
  */
-@Path("/news_articles/")
-@Produces(ServerWeb.MEDIA_TYPE_UTF8)
-@Consumes(ServerWeb.MEDIA_TYPE_UTF8)
+@RestController
+@RequestMapping(value = "/news_articles/", produces = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class NewsArticleResource {
 
-	// 1 week = 7 * 24 * 60 * 60
-	public static final int CACHE_MAX_AGE = 604800;
-	private final CacheControl ccontrol;
 	private final Logger log;
-	@Context
-	UriInfo uriInfo;
+	private final CacheControl cacheControl;
 	private IRequestExecutor executor;
 
-	public NewsArticleResource(IRequestExecutor executor2) {
-		this.executor = executor2;
-		ccontrol = new CacheControl();
-		ccontrol.setMaxAge(CACHE_MAX_AGE);
+	public NewsArticleResource() {
 		log = LoggerFactory.getLogger(this.getClass());
+		cacheControl = CacheControl.maxAge(7, TimeUnit.DAYS);
 	}
 
-	@GET
-	@Path("/{article_id}")
-	public Response getNewsArticleById(@PathParam("article_id") @NotNull String newsArticleId) {
-		Response result =
-				Response.ok(executor.getNewsArticleById(newsArticleId)).cacheControl(ccontrol).build();
+	@GetMapping(path = "/{article_id}")
+	public ResponseEntity<String> getNewsArticleById(
+			@PathVariable("article_id") @NotNull String newsArticleId) {
+		ResponseEntity<String> result =
+				ResponseEntity.ok().cacheControl(cacheControl)
+						.body(executor.getNewsArticleById(newsArticleId));
 		return result;
 	}
 
-	@GET
-	@Path("/{article_id}/images")
-	@Produces("image/*")
-	public Response getNewsArticleImageDataById(
-			@PathParam("article_id") @NotNull String newsArticleId, @QueryParam("w") Integer width,
-			@QueryParam("h") Integer height, @QueryParam("op") String operation) {
+	@GetMapping(path = "/{article_id}/images", produces = "image/*")
+	public ResponseEntity<byte[]> getNewsArticleImageDataById(
+			@PathVariable("article_id") @NotNull String newsArticleId, @RequestParam("w") Integer width,
+			@RequestParam("h") Integer height, @RequestParam("op") String operation,
+			HttpServletRequest request) {
 
 		IImageData imageData = executor.getImageDataByNewsArticleId(newsArticleId);
 		if (imageData.hasImageData()) {
@@ -66,18 +60,19 @@ public class NewsArticleResource {
 			}
 			// if (in any case some shit happened - log it and return 404 code)
 			if (imageBytes != null && imageBytes.length > 0) {
-				return Response.ok(imageBytes, imageData.getMediaType())
-						.header("Content-Length", imageBytes.length).cacheControl(ccontrol).build();
+				return ResponseEntity.ok().cacheControl(cacheControl).contentType(imageData.getMediaType())
+						.header("Content-Length", "" + imageBytes.length).body(imageBytes);
 			} else {
 				log.error("Some error happened while processing request: {}",
-						uriInfo.getRequestUri().toString());
-				return Response.status(404).build();
+						request.getRequestURI());
+				return ResponseEntity.notFound().build();
 			}
 		} else if (imageData.getUrl() != null && !imageData.getUrl().isEmpty()) {
-			return Response.status(301).header("Location", imageData.getUrl()).cacheControl(ccontrol)
+			return ResponseEntity.status(301).header("Location", imageData.getUrl())
+					.cacheControl(cacheControl)
 					.build();
 		} else {
-			return Response.status(404).build();
+			return ResponseEntity.notFound().build();
 		}
 	}
 

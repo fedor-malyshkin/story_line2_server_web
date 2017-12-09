@@ -1,35 +1,34 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Response;
+import java.util.concurrent.TimeUnit;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.ServerWeb;
 
 /**
  * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
  *
  * @author fedor
  */
-@Path("/news_headers/{source_domain}")
-@Produces(ServerWeb.MEDIA_TYPE_UTF8)
-@Consumes(ServerWeb.MEDIA_TYPE_UTF8)
+
+@RestController
+@RequestMapping(value = "/news_headers", produces = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class NewsHeaderResource {
 
-	private final CacheControl ccontrol;
+	private final CacheControl cacheControl;
 	private IRequestExecutor executor;
 
 	public NewsHeaderResource(IRequestExecutor executor2) {
 		this.executor = executor2;
-		ccontrol = new CacheControl();
-		ccontrol.setNoCache(true);
-
+		cacheControl = CacheControl.maxAge(5, TimeUnit.MINUTES);
 	}
 
 	/**
@@ -37,13 +36,13 @@ public class NewsHeaderResource {
 	 * @param sourceDomain
 	 * @return
 	 */
-	@GET
-	public Response listHeaders(@DefaultValue("10") @QueryParam("count") int count,
-			@PathParam("source_domain") String sourceDomain,
-			@QueryParam("last_news_id") String lastNewsId) {
-		Response result = Response.ok(executor.listNewsHeaders(sourceDomain, count, lastNewsId))
-				.cacheControl(ccontrol)
-				.build();
+	@GetMapping(path = "/{source_domain}")
+	public ResponseEntity<String> listHeaders(
+			@RequestParam(value = "count", defaultValue = "10") int count,
+			@PathVariable("source_domain") String sourceDomain,
+			@RequestParam("last_news_id") String lastNewsId) {
+		ResponseEntity<String> result = ResponseEntity.ok().cacheControl(cacheControl)
+				.body(executor.listNewsHeaders(sourceDomain, count, lastNewsId));
 		return result;
 	}
 

@@ -1,9 +1,11 @@
 package ru.nlp_project.story_line2.server_web;
 
+import org.springframework.http.MediaType;
+
 public interface IRequestExecutor {
 
 	byte[] processImageOperation(String operation, Integer width, Integer height, byte[] imageIn,
-			String mediaType);
+			MediaType mediaType);
 
 	default String listCategories() {
 		return "";
@@ -30,24 +32,26 @@ public interface IRequestExecutor {
 
 		/**
 		 * Get image url.
+		 *
 		 * @return url or null in abscence case.
 		 */
 		String getUrl();
 
 		/**
 		 * Has/Hasn't image data.
-		 * @return
 		 */
 		boolean hasImageData();
 
 		/**
 		 * Get media type of image.
+		 *
 		 * @return media type or empty string
 		 */
-		String getMediaType();
+		MediaType getMediaType();
 
 		/**
 		 * Get image.
+		 *
 		 * @return image bytes or empty array.
 		 */
 		byte[] bytes();

@@ -1,82 +1,152 @@
 package ru.nlp_project.story_line2.server_web;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * Объект-конфигурация (требуется фреймворком dropwizard.io)
- *
- * @author fedor
- */
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ServerWebConfiguration extends Configuration {
+@ConfigurationProperties(ignoreUnknownFields = false, prefix = "config")
+public class ServerWebConfiguration {
+
+	public String drpcHost;
+	public int drpcPort;
+	@JsonProperty(value = "influxdb_metrics")
+	public MetricsConfiguration influxdbMetrics = new MetricsConfiguration();
+	@JsonProperty(value = "sources")
+	public List<SourceConfiguration> sources = new ArrayList<SourceConfiguration>();
+
+	public String getDrpcHost() {
+		return drpcHost;
+	}
+
+	public void setDrpcHost(String drpcHost) {
+		this.drpcHost = drpcHost;
+	}
+
+	public int getDrpcPort() {
+		return drpcPort;
+	}
+
+	public void setDrpcPort(int drpcPort) {
+		this.drpcPort = drpcPort;
+	}
+
+	public MetricsConfiguration getInfluxdbMetrics() {
+		return influxdbMetrics;
+	}
+
+	public void setInfluxdbMetrics(
+			MetricsConfiguration influxdbMetrics) {
+		this.influxdbMetrics = influxdbMetrics;
+	}
+
+	public List<SourceConfiguration> getSources() {
+		return sources;
+	}
+
+	public void setSources(
+			List<SourceConfiguration> sources) {
+		this.sources = sources;
+	}
 
 	public static class MetricsConfiguration {
 
-		// enabled: true
-		@NotEmpty
-		@JsonProperty(value = "enabled")
 		public boolean enabled = false;
-
-		// influxdb_host: ""
-		@JsonProperty(value = "influxdb_host")
 		public String influxdbHost;
-
-
-		// influxdb_port: ""
-		@JsonProperty(value = "influxdb_port")
 		public int influxdbPort;
-
-		// influxdb_db: ""
-		@JsonProperty(value = "influxdb_db")
-		public String influxdbDB;
-
-		// influxdb_user: ""
-		@JsonProperty(value = "influxdb_user")
+		public String influxdbDb;
 		public String influxdbUser;
-
-		// influxdb_password: ""
-		@JsonProperty(value = "influxdb_password")
 		public String influxdbPassword;
-
-		// reporting_period: 30
-		@NotEmpty
-		@JsonProperty(value = "reporting_period")
 		public int reportingPeriod;
-	}
 
+		public String getInfluxdbHost() {
+			return influxdbHost;
+		}
+
+		public void setInfluxdbHost(String influxdbHost) {
+			this.influxdbHost = influxdbHost;
+		}
+
+		public int getInfluxdbPort() {
+			return influxdbPort;
+		}
+
+		public void setInfluxdbPort(int influxdbPort) {
+			this.influxdbPort = influxdbPort;
+		}
+
+		public String getInfluxdbDb() {
+			return influxdbDb;
+		}
+
+		public void setInfluxdbDb(String influxdbDb) {
+			this.influxdbDb = influxdbDb;
+		}
+
+		public String getInfluxdbUser() {
+			return influxdbUser;
+		}
+
+		public void setInfluxdbUser(String influxdbUser) {
+			this.influxdbUser = influxdbUser;
+		}
+
+		public String getInfluxdbPassword() {
+			return influxdbPassword;
+		}
+
+		public void setInfluxdbPassword(String influxdbPassword) {
+			this.influxdbPassword = influxdbPassword;
+		}
+
+		public int getReportingPeriod() {
+			return reportingPeriod;
+		}
+
+		public void setReportingPeriod(int reportingPeriod) {
+			this.reportingPeriod = reportingPeriod;
+		}
+
+		public boolean isEnabled() {
+
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
+	}
 
 	public static class SourceConfiguration {
 
-		@NotEmpty
-		@JsonProperty(value = "name")
 		public String name = "";
-
-		@NotEmpty
-		@JsonProperty(value = "title")
 		public String title;
-
-
-		@NotEmpty
-		@JsonProperty(value = "title_short")
 		public String titleShort;
 
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public String getTitleShort() {
+			return titleShort;
+		}
+
+		public void setTitleShort(String titleShort) {
+			this.titleShort = titleShort;
+		}
 	}
-
-
-	@JsonProperty("drpc_host")
-	public String drpcHost;
-	@JsonProperty("drpc_port")
-	public int drpcPort;
-
-	@JsonProperty(value = "influxdb_metrics")
-	public MetricsConfiguration metrics = new MetricsConfiguration();
-	@JsonProperty(value = "sources")
-	public List<SourceConfiguration> sources = new ArrayList<SourceConfiguration>();
 
 }

@@ -1,35 +1,32 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
+import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.ServerWeb;
 
 /**
  * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
- * 
- * @author fedor
  *
+ * @author fedor
  */
-@Path("/categories")
-@Produces(ServerWeb.MEDIA_TYPE_UTF8)
-@Consumes(ServerWeb.MEDIA_TYPE_UTF8)
+@RestController
+@RequestMapping(value = "/categories", produces = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class CategoryResource {
 
+	@Autowired
 	private IRequestExecutor executor;
 
-	public CategoryResource(IRequestExecutor executor2) {
-		this.executor = executor2;
-	}
-
-
-	@GET
-	public Response listCategories() {
-		Response result = Response.ok(executor.listCategories()).build();
-		return result;
+	@GetMapping
+	public ResponseEntity<String> listCategories() throws IOException {
+		ResponseEntity<String> response = ResponseEntity.ok(executor.listCategories());
+		return response;
 	}
 
 }

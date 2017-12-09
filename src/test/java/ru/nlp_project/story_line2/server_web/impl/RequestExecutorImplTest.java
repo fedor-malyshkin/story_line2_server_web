@@ -15,7 +15,7 @@ public class RequestExecutorImplTest {
 
 	@Before
 	public void setUp() {
-		testable = new RequestExecutorImpl();
+		testable = new RequestExecutorImpl(configurationManager);
 		IStormDRPCClient drpcClientMock = mock(IStormDRPCClient.class);
 		//testable.stormDRPCClient = drpcClientMock;
 	}

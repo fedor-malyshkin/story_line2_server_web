@@ -8,10 +8,11 @@ import java.util.Base64.Decoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
@@ -22,25 +23,24 @@ import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 public class RequestExecutorImpl implements IRequestExecutor {
 
 	private final Logger log;
-	@Inject
+	private final ServerWebConfiguration configurationManager;
+	@Autowired
 	IStormDRPCClient stormDRPCClient;
-	@Inject
-	ServerWebConfiguration configuration;
 	private String sourcesCache;
 
-	@Inject
-	public RequestExecutorImpl() {
+
+	public RequestExecutorImpl(
+			ServerWebConfiguration configurationManager) {
 		log = LoggerFactory.getLogger(this.getClass());
+		this.configurationManager = configurationManager;
 	}
 
-	public void initialize() {
-	}
 
 	@Override
 	public String listSources() {
 		if (sourcesCache == null) {
-			List<SourceModel> arr = new ArrayList<SourceModel>(configuration.sources.size());
-			for (SourceConfiguration s : configuration.sources) {
+			List<SourceModel> arr = new ArrayList<SourceModel>(configurationManager.sources.size());
+			for (SourceConfiguration s : configurationManager.sources) {
 				arr.add(new SourceModel(s.name, s.title, s.titleShort));
 			}
 			sourcesCache = JSONUtils.serialize(arr);
@@ -50,7 +50,7 @@ public class RequestExecutorImpl implements IRequestExecutor {
 
 	@Override
 	public byte[] processImageOperation(String operation, Integer width, Integer height,
-			byte[] imageIn, String mediaType) {
+			byte[] imageIn, MediaType mediaType) {
 		byte[] result = null;
 		try {
 			if ("crop".equalsIgnoreCase(operation)) {
@@ -100,16 +100,16 @@ public class RequestExecutorImpl implements IRequestExecutor {
 		}
 
 		// media type
-		String mediaType = "";
+		MediaType mediaType = MediaType.IMAGE_PNG;
 		String ext = StringUtils.substringAfterLast(image_url, ".");
 		switch (ext) {
 			case "jpg":
 			case "jpeg": {
-				mediaType = "image/jpeg";
+				mediaType = MediaType.IMAGE_JPEG;
 				break;
 			}
 			case "png": {
-				mediaType = "image/png";
+				mediaType = MediaType.IMAGE_PNG;
 				break;
 			}
 		}
@@ -119,17 +119,17 @@ public class RequestExecutorImpl implements IRequestExecutor {
 	public class ImageDataImpl implements IImageData {
 
 		private byte[] imageData;
-		private String mediaType;
+		private MediaType mediaType;
 		private String url;
 
-		public ImageDataImpl(byte[] imageData, String mediaType, String url) {
+		ImageDataImpl(byte[] imageData, MediaType mediaType, String url) {
 			this.imageData = imageData;
 			this.mediaType = mediaType;
 			this.url = url;
 		}
 
 		@Override
-		public String getMediaType() {
+		public MediaType getMediaType() {
 			return mediaType;
 		}
 

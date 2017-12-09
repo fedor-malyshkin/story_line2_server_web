@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
+import org.springframework.http.MediaType;
 
 public class ImageUtils {
 
@@ -24,7 +25,7 @@ public class ImageUtils {
 	 * @param mediaType формат изображения (image/jpg, image/png....)
 	 * @return требуемое изображение
 	 */
-	public static byte[] scale(byte[] imageIn, Integer widthIn, Integer heightIn, String mediaType)
+	public static byte[] scale(byte[] imageIn, Integer widthIn, Integer heightIn, MediaType mediaType)
 			throws IOException {
 		int height = validateHeight(heightIn);
 		int width = validateWidth(widthIn);
@@ -44,7 +45,7 @@ public class ImageUtils {
 	 * @param mediaType формат изображения (image/jpg, image/png....)
 	 * @return поток байтов с готовым изображением
 	 */
-	public static byte[] crop(byte[] imageIn, Integer widthIn, Integer heightIn, String mediaType)
+	public static byte[] crop(byte[] imageIn, Integer widthIn, Integer heightIn, MediaType mediaType)
 			throws IOException {
 		int height = validateHeight(heightIn);
 		int width = validateWidth(widthIn);
@@ -92,7 +93,8 @@ public class ImageUtils {
 	 * @param mediaType формат изображения (image/jpg, image/png....)
 	 * @return поток байтов с готовым изображением
 	 */
-	public static byte[] cropOld(byte[] imageIn, Integer widthIn, Integer heightIn, String mediaType)
+	public static byte[] cropOld(byte[] imageIn, Integer widthIn, Integer heightIn,
+			MediaType mediaType)
 			throws IOException {
 		int height = validateHeight(heightIn);
 		int width = validateWidth(widthIn);
@@ -149,7 +151,8 @@ public class ImageUtils {
 	 * @param mediaType формат изображения (image/jpg, image/png....)
 	 * @return требуемое изображение
 	 */
-	public static byte[] scaleOld(byte[] imageIn, Integer widthIn, Integer heightIn, String mediaType)
+	public static byte[] scaleOld(byte[] imageIn, Integer widthIn, Integer heightIn,
+			MediaType mediaType)
 			throws IOException {
 		int height = validateHeight(heightIn);
 		int width = validateWidth(widthIn);
@@ -168,9 +171,9 @@ public class ImageUtils {
 	 * @param mediaType формат изображения (image/jpg, image/png....)
 	 */
 	private static byte[] writeBufferedImage(
-			BufferedImage imageScaled, String mediaType) throws IOException {
+			BufferedImage imageScaled, MediaType mediaType) throws IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		if ("image/png".equalsIgnoreCase(mediaType)) {
+		if (MediaType.IMAGE_PNG.equals(mediaType)) {
 			ImageIO.write(imageScaled, "png", outputStream);
 		} else {
 			ImageIO.write(imageScaled, "jpg", outputStream);

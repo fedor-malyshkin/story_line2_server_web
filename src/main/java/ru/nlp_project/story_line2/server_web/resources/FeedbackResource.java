@@ -1,13 +1,13 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 
 /**
@@ -15,34 +15,31 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor;
  *
  * @author fedor
  */
-@Path("/feedback")
+
+@RestController
+@RequestMapping(value = "/feedback", produces = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class FeedbackResource {
 
+	@Autowired
 	private IRequestExecutor executor;
 
-	public FeedbackResource(IRequestExecutor executor2) {
-		this.executor = executor2;
-	}
 
-
-	@GET
-	@Path("about")
-	@Produces(MediaType.APPLICATION_XHTML_XML)
-	public Response getAboutInfo() {
-		Response result = Response.ok("<p>Cool!</p>").build();
+	@GetMapping(path = "about", produces = MediaType.APPLICATION_XHTML_XML_VALUE)
+	public ResponseEntity<String> getAboutInfo() {
+		ResponseEntity<String> result = ResponseEntity.ok("<p>Cool!</p>");
 		return result;
 	}
 
 
-	@PUT
-	@Path("send")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response sendFeedback(@FormParam("from") String from,
-			@FormParam("message") String message) {
+	@PutMapping(path = "send", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ResponseEntity<String> sendFeedback(@RequestParam("from") String from,
+			@RequestParam("message") String message) {
 		System.out.println("from = " + from);
 		System.out.println("message = " + message);
 
-		Response result = Response.ok().build();
+		ResponseEntity<String> result = ResponseEntity.ok().build();
 		return result;
 	}
 

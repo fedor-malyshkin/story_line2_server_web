@@ -1,23 +1,22 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Response;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
-import ru.nlp_project.story_line2.server_web.ServerWeb;
 
 /**
  * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
  *
  * @author fedor
  */
-@Path("/sources")
 
-@Produces(ServerWeb.MEDIA_TYPE_UTF8)
-@Consumes(ServerWeb.MEDIA_TYPE_UTF8)
+@RestController
+@RequestMapping(value = "/sources", produces = {
+		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class SourceResource {
 
 	private final CacheControl ccontrol;
@@ -26,14 +25,14 @@ public class SourceResource {
 
 	public SourceResource(IRequestExecutor executor2) {
 		this.executor = executor2;
-		ccontrol = new CacheControl();
-		ccontrol.setNoCache(true);
+		ccontrol = CacheControl.noCache();
 	}
 
 
-	@GET
-	public Response listSources() {
-		Response result = Response.ok(executor.listSources()).cacheControl(ccontrol).build();
+	@GetMapping
+	public ResponseEntity<String> listSources() {
+		ResponseEntity<String> result = ResponseEntity.ok().cacheControl(ccontrol)
+				.body(executor.listSources());
 		return result;
 	}
 

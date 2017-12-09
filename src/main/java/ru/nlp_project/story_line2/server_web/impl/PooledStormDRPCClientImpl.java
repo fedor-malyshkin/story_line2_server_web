@@ -3,7 +3,6 @@ package ru.nlp_project.story_line2.server_web.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.inject.Inject;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
@@ -34,14 +33,13 @@ public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 	private static final long MAX_WAIT_TO_BORROW_DRPC_CLIENT = 600;
 	private static final Integer MAX_WAIT_TO_EXECUTE = 1000;
 	private static final String DRPC_METHOD_GET_NEWS_IMAGES = "get_news_images";
-	@Inject
-	ServerWebConfiguration configurationManager;
+	private final ServerWebConfiguration configurationManager;
 	private Logger log;
 	private GenericObjectPool<DRPCClient> drpcClientPool;
 
-	@Inject
-	public PooledStormDRPCClientImpl() {
+	public PooledStormDRPCClientImpl(ServerWebConfiguration configurationManager) {
 		log = LoggerFactory.getLogger(this.getClass());
+		this.configurationManager = configurationManager;
 	}
 
 	public void initialize() {
@@ -112,7 +110,7 @@ public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 		// args
 		Map<String, Object> args = new HashMap<>();
 		args.put("id", id);
-		String drpcResult = callPooledSDRPCClient(DRPC_METHOD_GET_NEWS_IMAGES , args);
+		String drpcResult = callPooledSDRPCClient(DRPC_METHOD_GET_NEWS_IMAGES, args);
 		return removeSurroundingBrackets(drpcResult);
 		// return convertArrayToElement(res);
 	}

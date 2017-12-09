@@ -1,70 +1,50 @@
 package ru.nlp_project.story_line2.server_web;
 
-import javax.inject.Inject;
+import javax.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import ru.nlp_project.story_line2.server_web.impl.MetricsManagerImpl;
+import ru.nlp_project.story_line2.server_web.impl.PooledStormDRPCClientImpl;
+import ru.nlp_project.story_line2.server_web.impl.RequestExecutorImpl;
 
-import org.glassfish.jersey.CommonProperties;
 
-import io.dropwizard.Application;
-import io.dropwizard.jersey.DropwizardResourceConfig;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import ru.nlp_project.story_line2.server_web.dagger.ServerWebBuilder;
-import ru.nlp_project.story_line2.server_web.resources.CategoryResource;
-import ru.nlp_project.story_line2.server_web.resources.FeedbackResource;
-import ru.nlp_project.story_line2.server_web.resources.NewsArticleResource;
-import ru.nlp_project.story_line2.server_web.resources.NewsHeaderResource;
-import ru.nlp_project.story_line2.server_web.resources.SourceResource;
-
-/**
- * Объект-приложение (требуется фреймворком dropwizard.io)/
- *
- *
- * @author fedor
- *
- */
-public class ServerWebApplication extends Application<ServerWebConfiguration> {
-	@Inject
-	IRequestExecutor executor;
+@SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
+@EnableConfigurationProperties(ServerWebConfiguration.class)
+public class ServerWebApplication {
+	@Autowired
+	ServerWebConfiguration configurationManager;
+	@Autowired
+	IMetricsManager metricsManager;
 
 	public static void main(String[] args) throws Exception {
-		new ServerWebApplication().run(args);
+		SpringApplication.run(ServerWebApplication.class, args);
 	}
 
-	@Override
-	public String getName() {
-		return "server_web";
+	@Bean
+	protected IStormDRPCClient drpcClient() {
+		return new PooledStormDRPCClientImpl(configurationManager);
 	}
 
-	@Override
-	public void initialize(Bootstrap<ServerWebConfiguration> bootstrap) {}
-
-	@Override
-	public void run(ServerWebConfiguration configuration, Environment environment)
-			throws Exception {
-		ServerWebBuilder.setServerWebConfiguration(configuration);
-		ServerWebBuilder.getComponent().inject(this);
-
-		final ServerWebHealthCheck healthCheck = new ServerWebHealthCheck(configuration);
-
-
-		// resources
-		environment.jersey().register(new CategoryResource(executor));
-		environment.jersey().register(new NewsArticleResource(executor));
-		environment.jersey().register(new NewsHeaderResource(executor));
-		environment.jersey().register(new SourceResource(executor));
-		environment.jersey().register(new FeedbackResource(executor));
-
-		// OUTBOUND_CONTENT_LENGTH_BUFFER
-		DropwizardResourceConfig resourceConfig = environment.jersey().getResourceConfig();
-		resourceConfig.property(CommonProperties.OUTBOUND_CONTENT_LENGTH_BUFFER, 1024 * 1024);
-
-		// hc
-		environment.healthChecks().register("server_web", healthCheck);
-		// core
-		ServerWeb serverWeb = ServerWeb.newInstance();
-		environment.lifecycle().manage(serverWeb);
-
+	@Bean
+	protected IRequestExecutor requestExecutor() {
+		return new RequestExecutorImpl(configurationManager);
 	}
+
+	@Bean
+	protected IMetricsManager metricsManager() {
+		IMetricsManager result = new MetricsManagerImpl(configurationManager);
+		result.initialize();
+		return result;
+	}
+
+	@PreDestroy
+	public void stop() throws Exception {
+		metricsManager.shutdown();
+	}
+
 
 }
 
