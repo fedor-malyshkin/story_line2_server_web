@@ -1,5 +1,6 @@
 package ru.nlp_project.story_line2.server_web.resources;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,11 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 public class SourceResource {
 
 	private final CacheControl ccontrol;
+	@Autowired
 	private IRequestExecutor executor;
 
 
-	public SourceResource(IRequestExecutor executor2) {
-		this.executor = executor2;
+	public SourceResource() {
 		ccontrol = CacheControl.noCache();
 	}
 

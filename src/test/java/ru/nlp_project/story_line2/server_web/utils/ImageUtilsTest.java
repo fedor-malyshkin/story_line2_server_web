@@ -11,7 +11,9 @@ import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.MediaType;
 
 public class ImageUtilsTest {
 
@@ -19,6 +21,7 @@ public class ImageUtilsTest {
 	public void setUp() throws Exception {
 	}
 
+	@Ignore
 	@Test()
 	public void scaleMy() throws Exception {
 		InputStream inputStream = Thread.currentThread().getContextClassLoader()
@@ -27,13 +30,14 @@ public class ImageUtilsTest {
 		IOUtils.copy(inputStream, byteOUS);
 		IntStream.range(0, 1000).forEach((i) -> {
 			try {
-				ImageUtils.scale(byteOUS.toByteArray(), 200, 200, "image/png");
+				ImageUtils.scale(byteOUS.toByteArray(), 200, 200, MediaType.IMAGE_JPEG);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		});
 	}
 
+	@Ignore
 	@Test()
 	public void scaleImageScalr() throws Exception {
 		InputStream inputStream = Thread.currentThread().getContextClassLoader()

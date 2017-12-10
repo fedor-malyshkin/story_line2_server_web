@@ -42,6 +42,7 @@ public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 		this.configurationManager = configurationManager;
 	}
 
+	@Override
 	public void initialize() {
 		DRPCClientPooledObjectFactory objectFactory = new DRPCClientPooledObjectFactory();
 		drpcClientPool = new GenericObjectPool<>(objectFactory);

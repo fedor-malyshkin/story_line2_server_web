@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,12 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor.IImageData;
  */
 @RestController
 @RequestMapping(value = "/news_articles/", produces = {
-		MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {
 		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class NewsArticleResource {
 
 	private final Logger log;
 	private final CacheControl cacheControl;
+	@Autowired
 	private IRequestExecutor executor;
 
 	public NewsArticleResource() {
@@ -45,10 +46,12 @@ public class NewsArticleResource {
 		return result;
 	}
 
-	@GetMapping(path = "/{article_id}/images", produces = "image/*")
+	@GetMapping(path = "/{article_id}/images")
 	public ResponseEntity<byte[]> getNewsArticleImageDataById(
-			@PathVariable("article_id") @NotNull String newsArticleId, @RequestParam("w") Integer width,
-			@RequestParam("h") Integer height, @RequestParam("op") String operation,
+			@PathVariable("article_id") @NotNull String newsArticleId,
+			@RequestParam(value = "w", required = false) Integer width,
+			@RequestParam(value = "h", required = false) Integer height,
+			@RequestParam(value = "op", required = false) String operation,
 			HttpServletRequest request) {
 
 		IImageData imageData = executor.getImageDataByNewsArticleId(newsArticleId);
@@ -56,7 +59,7 @@ public class NewsArticleResource {
 			byte[] imageBytes = imageData.bytes();
 			if (operation != null) {
 				imageBytes = executor
-						.processImageOperation(operation, height, width, imageBytes, imageData.getMediaType());
+						.processImageOperation(operation, width, height, imageBytes, imageData.getMediaType());
 			}
 			// if (in any case some shit happened - log it and return 404 code)
 			if (imageBytes != null && imageBytes.length > 0) {

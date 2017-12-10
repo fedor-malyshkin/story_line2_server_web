@@ -16,7 +16,6 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor;
  */
 @RestController
 @RequestMapping(value = "/categories", produces = {
-		MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {
 		MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class CategoryResource {
 
