@@ -1,3 +1,11 @@
+spring:
+  cache:
+    cache-names:
+      - "responses2"
+    jcache:
+      provider: "org.ehcache.jsr107.EhcacheCachingProvider"
+      config: "classpath:ehcache.xml"
+
 management:
   security:
     enabled: false

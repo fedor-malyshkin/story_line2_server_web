@@ -19,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // see: https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests
 // MockMvc usage see: https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html#spring-mvc-test-framework
 @RunWith(SpringRunner.class)
-// @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @WebMvcTest(NewsHeaderResource.class)
 public class NewsHeaderResourceTest {
 

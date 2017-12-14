@@ -1,0 +1,43 @@
+<config
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xmlns='http://www.ehcache.org/v3'
+  xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+  <!--
+    <service>
+      <jsr107:defaults default-template="byValueTemplate">
+        <jsr107:cache name="responses" template="byValueTemplate"/>
+      </jsr107:defaults>
+    </service>
+  -->
+  <persistence directory="/var/tmp" />
+
+  <cache alias="images" uses-template="bigAmountLongTime"/>
+  <cache alias="articles" uses-template="bigAmountLongTime"/>
+  <cache alias="categories" uses-template="smallAmountSmallTime"/>
+  <cache alias="sources" uses-template="smallAmountSmallTime"/>
+  <cache alias="headers" uses-template="smallAmountSmallTime"/>
+
+
+  <cache-template name="smallAmountSmallTime">
+    <key-type>java.lang.Object</key-type>
+    <value-type>java.lang.Object</value-type>
+    <expiry>
+      <ttl unit="minutes">1</ttl>
+    </expiry>
+    <heap unit="entries">1000</heap>
+  </cache-template>
+
+  <cache-template name="bigAmountLongTime">
+    <expiry>
+      <ttl unit="hours">5</ttl>
+    </expiry>
+    <resources>
+      <heap unit="entries">1000</heap>
+      <offheap unit="MB">20</offheap>
+      <disk unit="MB" persistent="false">100</disk>
+    </resources>
+  </cache-template>
+
+
+</config>
+

@@ -61,20 +61,15 @@ public class NewsArticleResource {
 				imageBytes = executor
 						.processImageOperation(operation, width, height, imageBytes, imageData.getMediaType());
 			}
-			// if (in any case some shit happened - log it and return 404 code)
-			if (imageBytes != null && imageBytes.length > 0) {
-				return ResponseEntity.ok().cacheControl(cacheControl).contentType(imageData.getMediaType())
-						.header("Content-Length", "" + imageBytes.length).body(imageBytes);
-			} else {
-				log.error("Some error happened while processing request: {}",
-						request.getRequestURI());
-				return ResponseEntity.notFound().build();
-			}
+			return ResponseEntity.ok().cacheControl(cacheControl).contentType(imageData.getMediaType())
+					.header("Content-Length", "" + imageBytes.length).body(imageBytes);
+
 		} else if (imageData.getUrl() != null && !imageData.getUrl().isEmpty()) {
 			return ResponseEntity.status(301).header("Location", imageData.getUrl())
 					.cacheControl(cacheControl)
 					.build();
 		} else {
+			// in any other case
 			return ResponseEntity.notFound().build();
 		}
 	}
