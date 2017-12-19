@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
+import ru.nlp_project.story_line2.server_web.IMetricsManager;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
@@ -28,30 +29,27 @@ import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 public class RequestExecutorImpl implements IRequestExecutor {
 
 	private final Logger log;
-	private final ServerWebConfiguration configurationManager;
 	@Autowired
-	IStormDRPCClient stormDRPCClient;
-	private String sourcesCache;
+	private IMetricsManager metricManager;
+	@Autowired
+	private ServerWebConfiguration configuration;
+	@Autowired
+	private IStormDRPCClient stormDRPCClient;
 
-
-	public RequestExecutorImpl(
-			ServerWebConfiguration configurationManager) {
+	public RequestExecutorImpl() {
 		log = LoggerFactory.getLogger(this.getClass());
-		this.configurationManager = configurationManager;
 	}
 
 
 	@Override
 	@Cacheable("sources")
 	public String listSources() {
-		if (sourcesCache == null) {
-			List<SourceModel> arr = new ArrayList<SourceModel>(configurationManager.sources.size());
-			for (SourceConfiguration s : configurationManager.sources) {
-				arr.add(new SourceModel(s.name, s.title, s.titleShort));
-			}
-			sourcesCache = JSONUtils.serialize(arr);
+		metricManager.incrementInvocation(IMetricsManager.METHOD_LIST_SOURCES, IMetricsManager.NO_SOURCE);
+		List<SourceModel> arr = new ArrayList<SourceModel>(configuration.sources.size());
+		for (SourceConfiguration s : configuration.sources) {
+			arr.add(new SourceModel(s.name, s.title, s.titleShort));
 		}
-		return sourcesCache;
+		return JSONUtils.serialize(arr);
 	}
 
 	@Override
@@ -81,18 +79,32 @@ public class RequestExecutorImpl implements IRequestExecutor {
 	@Override
 	@Cacheable("headers")
 	public String listNewsHeaders(String source, int count, String lastNewsId) {
-		return stormDRPCClient.getNewsHeaders(source, count, lastNewsId);
+		metricManager.incrementInvocation(IMetricsManager.METHOD_LIST_HEADERS, source);
+		long start = System.currentTimeMillis();
+		// invocation
+		String result = stormDRPCClient.getNewsHeaders(source, count, lastNewsId);
+
+		long duration = System.currentTimeMillis() - start;
+		metricManager.durationInvocation(IMetricsManager.METHOD_LIST_HEADERS, source, duration);
+		return result;
 	}
 
 	@Override
 	@Cacheable("articles")
 	public String getNewsArticleById(String newsArticleId) {
-		return stormDRPCClient.getNewsArticleById(newsArticleId);
+		metricManager.incrementInvocation(IMetricsManager.METHOD_GET_NEWS_ARTICLE, IMetricsManager.NO_SOURCE);
+		long start = System.currentTimeMillis();
+		// invocation
+		String result = stormDRPCClient.getNewsArticleById(newsArticleId);
+		long duration = System.currentTimeMillis() - start;
+		metricManager.durationInvocation(IMetricsManager.METHOD_GET_NEWS_ARTICLE, IMetricsManager.NO_SOURCE, duration);
+		return result;
 	}
 
 	@Override
 	@Cacheable("images")
 	public IImageData getImageDataByNewsArticleId(String newsArticleId) {
+		metricManager.incrementInvocation(IMetricsManager.METHOD_GET_NEWS_ARTICLE_IMAGE, IMetricsManager.NO_SOURCE);
 		// возвражает JSON с 2-я ключами "image_url" (images's FQDN) и "images_data" (base64 on empty string)
 		String json = stormDRPCClient.getImageDataByNewsArticleId(newsArticleId);
 		return convertJsonToImagesData(json);

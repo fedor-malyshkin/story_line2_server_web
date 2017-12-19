@@ -33,13 +33,13 @@ public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 	private static final long MAX_WAIT_TO_BORROW_DRPC_CLIENT = 600;
 	private static final Integer MAX_WAIT_TO_EXECUTE = 1000;
 	private static final String DRPC_METHOD_GET_NEWS_IMAGES = "get_news_images";
-	private final ServerWebConfiguration configurationManager;
+	private final ServerWebConfiguration configuration;
 	private Logger log;
 	private GenericObjectPool<DRPCClient> drpcClientPool;
 
-	public PooledStormDRPCClientImpl(ServerWebConfiguration configurationManager) {
+	public PooledStormDRPCClientImpl(ServerWebConfiguration configuration) {
 		log = LoggerFactory.getLogger(this.getClass());
-		this.configurationManager = configurationManager;
+		this.configuration = configuration;
 	}
 
 	@Override
@@ -135,8 +135,8 @@ public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 		public DRPCClient create() throws Exception {
 			// get configuration (default, my, and command-line combined)
 			Map<String, Object> config = Utils.readStormConfig();
-			return new DRPCClient(config, configurationManager.drpcHost,
-					configurationManager.drpcPort, MAX_WAIT_TO_EXECUTE);
+			return new DRPCClient(config, configuration.drpcHost,
+					configuration.drpcPort, MAX_WAIT_TO_EXECUTE);
 		}
 
 		@Override

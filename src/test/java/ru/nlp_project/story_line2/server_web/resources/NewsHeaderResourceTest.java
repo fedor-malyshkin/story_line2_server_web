@@ -10,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import ru.nlp_project.story_line2.server_web.IMetricsManager;
 
 // see: https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests
 // MockMvc usage see: https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html#spring-mvc-test-framework
@@ -37,10 +38,17 @@ public class NewsHeaderResourceTest {
 	@TestConfiguration
 	static class Config extends DelegatingWebMvcConfiguration {
 
+
 		@Override
 		public void configurePathMatch(PathMatchConfigurer configurer) {
 			configurer.setUseSuffixPatternMatch(false);
 		}
+
+		@Bean
+		protected IMetricsManager metricsManager() {
+			return mock(IMetricsManager.class);
+		}
+
 
 	}
 }

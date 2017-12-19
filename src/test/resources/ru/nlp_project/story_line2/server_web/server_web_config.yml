@@ -1,7 +1,9 @@
 spring:
+  metrics:
+    export:
+      enabled: true
+#      delay-millis: 1000
   cache:
-    cache-names:
-      - "responses2"
     jcache:
       provider: "org.ehcache.jsr107.EhcacheCachingProvider"
       config: "classpath:ehcache.xml"
@@ -41,5 +43,8 @@ config:
     influxdb_db: "storyline"
     influxdb_user: "server_web"
     influxdb_password: "server_web"
+    # период отправки данных на сервер (в секундах)
     reporting_period: 30
+    # период отправки данных в лог (в секундах)
+    log_reporting_period: 30
 

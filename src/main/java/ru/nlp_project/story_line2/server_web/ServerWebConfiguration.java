@@ -1,6 +1,5 @@
 package ru.nlp_project.story_line2.server_web;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,9 +10,7 @@ public class ServerWebConfiguration {
 
 	public String drpcHost;
 	public int drpcPort;
-	@JsonProperty(value = "influxdb_metrics")
 	public MetricsConfiguration influxdbMetrics = new MetricsConfiguration();
-	@JsonProperty(value = "sources")
 	public List<SourceConfiguration> sources = new ArrayList<SourceConfiguration>();
 
 	public String getDrpcHost() {
@@ -50,6 +47,17 @@ public class ServerWebConfiguration {
 		this.sources = sources;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("ServerWebConfiguration{");
+		sb.append("drpcHost='").append(drpcHost).append('\'');
+		sb.append(", drpcPort=").append(drpcPort);
+		sb.append(", influxdbMetrics=").append(influxdbMetrics);
+		sb.append(", sources=").append(sources);
+		sb.append('}');
+		return sb.toString();
+	}
+
 	public static class MetricsConfiguration {
 
 		public boolean enabled = false;
@@ -59,6 +67,15 @@ public class ServerWebConfiguration {
 		public String influxdbUser;
 		public String influxdbPassword;
 		public int reportingPeriod;
+		public int logReportingPeriod;
+
+		public int getLogReportingPeriod() {
+			return logReportingPeriod;
+		}
+
+		public void setLogReportingPeriod(int logReportingPeriod) {
+			this.logReportingPeriod = logReportingPeriod;
+		}
 
 		public String getInfluxdbHost() {
 			return influxdbHost;
@@ -116,6 +133,20 @@ public class ServerWebConfiguration {
 		public void setEnabled(boolean enabled) {
 			this.enabled = enabled;
 		}
+
+		@Override
+		public String toString() {
+			final StringBuilder sb = new StringBuilder("MetricsConfiguration{");
+			sb.append("enabled=").append(enabled);
+			sb.append(", influxdbHost='").append(influxdbHost).append('\'');
+			sb.append(", influxdbPort=").append(influxdbPort);
+			sb.append(", influxdbDb='").append(influxdbDb).append('\'');
+			sb.append(", influxdbUser='").append(influxdbUser).append('\'');
+			sb.append(", influxdbPassword='").append(influxdbPassword).append('\'');
+			sb.append(", reportingPeriod=").append(reportingPeriod);
+			sb.append('}');
+			return sb.toString();
+		}
 	}
 
 	public static class SourceConfiguration {
@@ -147,6 +178,15 @@ public class ServerWebConfiguration {
 		public void setTitleShort(String titleShort) {
 			this.titleShort = titleShort;
 		}
-	}
 
+		@Override
+		public String toString() {
+			final StringBuilder sb = new StringBuilder("SourceConfiguration{");
+			sb.append("name='").append(name).append('\'');
+			sb.append(", title='").append(title).append('\'');
+			sb.append(", titleShort='").append(titleShort).append('\'');
+			sb.append('}');
+			return sb.toString();
+		}
+	}
 }

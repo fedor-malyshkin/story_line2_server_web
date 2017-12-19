@@ -40,9 +40,11 @@ public class NewsArticleResource {
 	@GetMapping(path = "/{article_id}")
 	public ResponseEntity<String> getNewsArticleById(
 			@PathVariable("article_id") @NotNull String newsArticleId) {
+
 		ResponseEntity<String> result =
 				ResponseEntity.ok().cacheControl(cacheControl)
 						.body(executor.getNewsArticleById(newsArticleId));
+
 		return result;
 	}
 
@@ -55,6 +57,7 @@ public class NewsArticleResource {
 			HttpServletRequest request) {
 
 		IImageData imageData = executor.getImageDataByNewsArticleId(newsArticleId);
+
 		if (imageData.hasImageData()) {
 			byte[] imageBytes = imageData.bytes();
 			if (operation != null) {

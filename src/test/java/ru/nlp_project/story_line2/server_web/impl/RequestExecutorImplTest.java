@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.nlp_project.story_line2.server_web.IMetricsManager;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor.IImageData;
 import ru.nlp_project.story_line2.server_web.IStormDRPCClient;
 import ru.nlp_project.story_line2.server_web.ServerWebConfiguration;
@@ -26,8 +27,6 @@ public class RequestExecutorImplTest {
 	IStormDRPCClient stormDRPCClient;
 	@Autowired
 	private RequestExecutorImpl testable;
-	@Autowired
-	private ServerWebConfiguration configurationManager;
 
 	@Test
 	public void testListSources() {
@@ -56,16 +55,21 @@ public class RequestExecutorImplTest {
 	}
 
 	@EnableConfigurationProperties(ServerWebConfiguration.class)
-	static class TestConfig {
+	public static class TestConfig {
 
 		@Bean
-		public RequestExecutorImpl getRequestExecutorImpl(ServerWebConfiguration configurationManager) {
-			return new RequestExecutorImpl(configurationManager);
+		public RequestExecutorImpl requestExecutor() {
+			return new RequestExecutorImpl();
 		}
 
 		@Bean
-		public IStormDRPCClient getStormDRPCClient() {
+		public IStormDRPCClient stormDRPCClient() {
 			return mock(IStormDRPCClient.class);
+		}
+
+		@Bean
+		public IMetricsManager metricsManager () {
+			return mock(IMetricsManager.class);
 		}
 	}
 

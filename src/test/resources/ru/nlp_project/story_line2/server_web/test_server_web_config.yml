@@ -1,7 +1,24 @@
-drpc_host: localhost
-drpc_port: 3333
+spring:
+  metrics:
+    export:
+      enabled: true
+#      delay-millis: 1000
+  cache:
+    jcache:
+      provider: "org.ehcache.jsr107.EhcacheCachingProvider"
+      config: "classpath:ehcache.xml"
 
-sources:
+management:
+  security:
+    enabled: false
+server:
+  port: 8001
+
+config:
+  drpc_host: "datahouse01.nlp-project.ru"
+  drpc_port: 3772
+
+  sources:
     - name: "bnkomi.ru"
       title: "Информационное агентство БНКоми"
       title_short: "БНКоми"
@@ -11,3 +28,14 @@ sources:
     - name: "komiinform.ru"
       title: "Информационное агенство Комиинформ"
       title_short: "Комиинформ"
+
+# Metrics reporting
+  influxdb_metrics:
+    enabled: true
+    influxdb_host: "ci.nlp-project.ru"
+    influxdb_port: 8086
+    influxdb_db: "storyline"
+    influxdb_user: "server_web"
+    influxdb_password: "server_web"
+    reporting_period: 30
+
