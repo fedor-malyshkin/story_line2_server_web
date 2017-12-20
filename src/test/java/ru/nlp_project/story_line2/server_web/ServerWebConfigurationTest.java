@@ -36,7 +36,7 @@ public class ServerWebConfigurationTest {
 	public void testToString() {
 		Assertions.assertThat(testable.toString()).isEqualToIgnoringCase("ServerWebConfiguration{"
 				+ "drpcHost='datahouse01.nlp-project.ru', drpcPort=3772, influxdbMetrics=MetricsConfiguration{"
-				+ "enabled=true, influxdbHost='ci.nlp-project.ru', influxdbPort=8086, influxdbDb='storyline', influxdbUser='server_web', influxdbPassword='server_web', reportingPeriod=30}, "
+				+ "enabled=true, influxdbHost='ci.nlp-project.ru', influxdbPort=8086, influxdbDb='storyline', influxdbUser='server_web', influxdbPassword='server_web', reportingPeriod=30, logReportingPeriod=30}, "
 				+ "sources=["
 				+ "SourceConfiguration{name='bnkomi.ru', title='Информационное агентство БНКоми', titleShort='БНКоми'}, "
 				+ "SourceConfiguration{name='7x7-journal.ru', title='Межрегиональный интернет-журнал \"7x7\"', titleShort='\"7x7\"'}, "

@@ -37,5 +37,8 @@ config:
     influxdb_db: "storyline"
     influxdb_user: "server_web"
     influxdb_password: "server_web"
+    # период отправки данных на сервер (в секундах)
     reporting_period: 30
+    # период отправки данных в лог (в секундах)
+    log_reporting_period: 30
 

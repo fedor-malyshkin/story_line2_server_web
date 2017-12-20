@@ -144,6 +144,7 @@ public class ServerWebConfiguration {
 			sb.append(", influxdbUser='").append(influxdbUser).append('\'');
 			sb.append(", influxdbPassword='").append(influxdbPassword).append('\'');
 			sb.append(", reportingPeriod=").append(reportingPeriod);
+			sb.append(", logReportingPeriod=").append(logReportingPeriod);
 			sb.append('}');
 			return sb.toString();
 		}

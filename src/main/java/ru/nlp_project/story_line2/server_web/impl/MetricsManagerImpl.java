@@ -56,6 +56,8 @@ public class MetricsManagerImpl implements IMetricsManager {
 
 	private void initializeMetricsLogging() throws UnknownHostException {
 		MetricsConfiguration metricsConfiguration = configuration.influxdbMetrics;
+		System.out.println(configuration);
+		System.out.println(metricsConfiguration);
 
 		slfjReporter = Slf4jReporter.forRegistry(metricRegistry)
 				.outputTo(LoggerFactory.getLogger("ru.nlp_project.story_line2.server_web"))
@@ -147,7 +149,7 @@ public class MetricsManagerImpl implements IMetricsManager {
 
 	private Counter createCounter(String method, String source) {
 		String name = String
-				.format("%s.%s.%s.invocation_duration", IMetricsManager.IN_APP_PREFIX, method,
+				.format("%s.%s.%s.invocation_counter", IMetricsManager.IN_APP_PREFIX, method,
 						source.replace(".", "_"));
 		return metricRegistry.counter(name);
 	}
@@ -169,7 +171,7 @@ public class MetricsManagerImpl implements IMetricsManager {
 
 	private Timer createTimer(String method, String source) {
 		String name = String
-				.format("%s.%s.%s.invocation_count", IMetricsManager.IN_APP_PREFIX, method,
+				.format("%s.%s.%s.invocation_duration", IMetricsManager.IN_APP_PREFIX, method,
 						source.replace(".", "_"));
 		return metricRegistry.timer(name);
 	}
