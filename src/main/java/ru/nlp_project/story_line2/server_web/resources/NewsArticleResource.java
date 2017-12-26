@@ -18,7 +18,7 @@ import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor.IImageData;
 
 /**
- * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
+
  *
  * @author fedor
  */

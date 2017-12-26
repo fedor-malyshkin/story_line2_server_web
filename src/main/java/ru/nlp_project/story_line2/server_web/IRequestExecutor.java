@@ -25,6 +25,8 @@ public interface IRequestExecutor {
 
 	IImageData getImageDataByNewsArticleId(String newsArticleId);
 
+	void maintenanceCommand(String command, String param1, String param2);
+
 	/**
 	 * Interface for data about images in news.
 	 */

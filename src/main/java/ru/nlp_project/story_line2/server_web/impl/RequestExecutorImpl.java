@@ -171,4 +171,10 @@ public class RequestExecutorImpl implements IRequestExecutor {
 			return imageData.length != 0;
 		}
 	}
+
+
+	@Override
+	public void maintenanceCommand(String command, String param1, String param2) {
+		stormDRPCClient.maintenanceCommand(command, param1, param2);
+	}
 }

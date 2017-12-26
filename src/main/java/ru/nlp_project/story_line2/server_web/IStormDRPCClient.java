@@ -9,4 +9,6 @@ public interface IStormDRPCClient {
 	String getImageDataByNewsArticleId(String newsArticleId);
 
 	void initialize();
+
+	void maintenanceCommand(String command, String param1, String param2);
 }

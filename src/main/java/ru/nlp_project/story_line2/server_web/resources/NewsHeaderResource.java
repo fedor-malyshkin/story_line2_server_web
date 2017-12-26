@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.nlp_project.story_line2.server_web.IRequestExecutor;
 
 /**
- * Не используем Dagger2 тут, т.к. идёт конфлик использования @Inject с Jersey.
+ *
  *
  * @author fedor
  */

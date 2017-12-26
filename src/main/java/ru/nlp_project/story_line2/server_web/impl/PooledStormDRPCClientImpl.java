@@ -29,6 +29,7 @@ import ru.nlp_project.story_line2.server_web.utils.JSONUtils;
 public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 
 	private static final String DRPC_METHOD_GET_NEWS_HEADERS = "get_news_headers";
+	private static final String DRPC_METHOD_MAINTENANCE = "maintenance";
 	private static final String DRPC_METHOD_GET_NEWS_ARTICLE = "get_news_article";
 	private static final long MAX_WAIT_TO_BORROW_DRPC_CLIENT = 600;
 	private static final Integer MAX_WAIT_TO_EXECUTE = 1000;
@@ -46,6 +47,16 @@ public class PooledStormDRPCClientImpl implements IStormDRPCClient {
 	public void initialize() {
 		DRPCClientPooledObjectFactory objectFactory = new DRPCClientPooledObjectFactory();
 		drpcClientPool = new GenericObjectPool<>(objectFactory);
+	}
+
+	@Override
+	public void maintenanceCommand(String command, String param1, String param2) {
+		// args
+		Map<String, Object> args = new HashMap<>();
+		args.put("command", command);
+		args.put("param1", param1);
+		args.put("param2", param2);
+		callPooledSDRPCClient(DRPC_METHOD_MAINTENANCE, args);
 	}
 
 	@Override
